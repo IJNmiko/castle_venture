@@ -6,7 +6,14 @@ SCREEN_HEIGHT = 50
 LIMIT_FPS = 20
 
 tdl.set_font('assets/arial10x10.png', greyscale=True, altLayout=True)
-console = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title='Castle Venture', fullscreen=False)
+
+console = tdl.init(
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
+    title='Castle Venture',
+    fullscreen=False
+)
+
 tdl.set_fps(LIMIT_FPS)
 
 game = Game.Game()
