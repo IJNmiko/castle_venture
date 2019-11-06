@@ -1,9 +1,11 @@
+import json
 from PIL import Image
 
 
 class Game:
     def __init__(self):
         self.maps = {}
+        self.maps_events = {}
         self.map_size = 40
 
         self.current_map = 'start'
@@ -19,8 +21,15 @@ class Game:
     def playerMove(self, relative_x, relative_y):
         new_x = self.player_x + relative_x
         new_y = self.player_y + relative_y
-        index = (new_y * self.map_size) + new_x
 
+        # Check for event activation
+        pos = (new_x, new_y)
+        if pos in self.maps_events[self.current_map]:
+            event = self.maps_events[self.current_map][pos]
+            self.handleEvent(event)
+            return
+
+        index = (new_y * self.map_size) + new_x
         if self.maps[self.current_map][index] != 'ground':
             return
 
@@ -28,6 +37,12 @@ class Game:
         self.player_y = new_y
 
     def loadMap(self, name):
+        map_data = json.load(
+            open('assets/maps/' + name + '.json', 'r')
+        )
+
+        self.maps_events[name] = {}
+
         im = Image.open('assets/maps/' + name + '.png')
         im = im.convert('RGB')
 
@@ -43,6 +58,12 @@ class Game:
                     tiles.append('wall')
                 elif pixel == (195, 195, 195):
                     tiles.append('gate')
+                elif pixel[0] == 255:
+                    # Handle event tiles
+                    event = map_data['events'][str(pixel[1])]
+                    self.maps_events[name][(x, y)] = event
+
+                    tiles.append('ground')
                 else:
                     tiles.append('?')
 
@@ -71,3 +92,11 @@ class Game:
             bg=None,
             fg=(255, 255, 255)
         )
+
+    def handleEvent(self, event):
+        tokens = event.split()
+
+        if tokens[0] == 'map':
+            self.current_map = tokens[1]
+            self.player_x = int(tokens[2])
+            self.player_y = int(tokens[3])
