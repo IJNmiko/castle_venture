@@ -1,4 +1,5 @@
 {
+    "description": "You are in the Entrance Hall. To the north is a large Doorway. To the south is the Castle Courtyard.",
     "events": {
         "0": "map start 20 1"
     }

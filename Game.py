@@ -9,6 +9,7 @@ class Game:
         self.map_size = 40
 
         self.current_map = 'start'
+        self.current_map_desc = ''
         self.player_x = int(self.map_size / 2)
         self.player_y = int(self.map_size / 2)
 
@@ -68,8 +69,12 @@ class Game:
                     tiles.append('?')
 
         self.maps[name] = tiles
+        self.current_map_desc = map_data['description']
 
     def renderCurrentMap(self, console):
+        # Print the map's description
+        self.renderText(console, self.current_map_desc, 0, 41, 40)
+
         if self.current_map not in self.maps:
             self.loadMap(self.current_map)
 
@@ -92,6 +97,26 @@ class Game:
             bg=None,
             fg=(255, 255, 255)
         )
+
+    def renderText(self, console, text, x, y, w):
+        console.clear()
+
+        cur_x = 0
+        cur_y = 0
+
+        for c in text:
+            console.draw_char(
+                x + cur_x,
+                y + cur_y,
+                c,
+                bg=None,
+                fg=(255, 255, 255)
+            )
+
+            cur_x += 1
+            if cur_x >= w and c == ' ':
+                cur_x = 0
+                cur_y += 1
 
     def handleEvent(self, event):
         tokens = event.split()

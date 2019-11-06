@@ -5,7 +5,7 @@ SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
 LIMIT_FPS = 20
 
-tdl.set_font('assets/arial10x10.png', greyscale=True, altLayout=True)
+tdl.set_font('assets/terminal8x12_gs_tc.png', greyscale=True, altLayout=True)
 
 console = tdl.init(
     SCREEN_WIDTH,
