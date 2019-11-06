@@ -10,8 +10,7 @@ console = tdl.init(SCREEN_WIDTH, SCREEN_HEIGHT, title='Castle Venture', fullscre
 tdl.setFPS(LIMIT_FPS)
 
 game = Game.Game()
-game.loadMap('start')
 
 while not tdl.event.is_window_closed():
-    console.draw_char(1, 1, '@', bg=None, fg=(255,255,255))
+    game.renderCurrentMap(console)
     tdl.flush()

@@ -2,11 +2,18 @@ from PIL import Image
 
 class Game:
     def __init__(self):
-        self.current_map = 'start'
-        self.player_x    = 14
-        self.player_y    = 14
-
         self.maps = {}
+        self.map_size = 40
+
+        self.current_map = 'start'
+        self.player_x    = self.map_size / 2
+        self.player_y    = self.map_size / 2
+
+        self.tiles = {
+            'ground': ' ',
+            'wall':   chr(178),
+            'gate':   chr(176)
+        }
 
     def loadMap(self, name):
         im = Image.open('assets/maps/' + name + '.png')
@@ -28,4 +35,18 @@ class Game:
                     tiles.append('?')
 
         self.maps[name] = tiles
-        print(tiles)
+
+    def renderCurrentMap(self, console):
+        if self.current_map not in self.maps:
+            self.loadMap(self.current_map)
+
+        x = 0
+        y = 0
+
+        for t in self.maps[self.current_map]:
+            console.draw_char(x, y, self.tiles[t], bg=None, fg=(255,255,255))
+
+            x += 1
+            if x == self.map_size:
+                x = 0
+                y += 1
