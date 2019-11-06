@@ -6,14 +6,18 @@ class Game:
         self.map_size = 40
 
         self.current_map = 'start'
-        self.player_x    = self.map_size / 2
-        self.player_y    = self.map_size / 2
+        self.player_x    = int(self.map_size / 2)
+        self.player_y    = int(self.map_size / 2)
 
         self.tiles = {
             'ground': ' ',
             'wall':   chr(178),
             'gate':   chr(176)
         }
+
+    def playerMove(self, relative_x, relative_y):
+        self.player_x += relative_x
+        self.player_y += relative_y
 
     def loadMap(self, name):
         im = Image.open('assets/maps/' + name + '.png')
@@ -50,3 +54,6 @@ class Game:
             if x == self.map_size:
                 x = 0
                 y += 1
+
+    def renderEntities(self, console):
+        console.draw_char(self.player_x, self.player_y, '@', bg=None, fg=(255,255,255))
