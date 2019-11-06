@@ -16,8 +16,14 @@ class Game:
         }
 
     def playerMove(self, relative_x, relative_y):
-        self.player_x += relative_x
-        self.player_y += relative_y
+        new_x = self.player_x + relative_x
+        new_y = self.player_y + relative_y
+
+        if self.maps[self.current_map][(new_y * self.map_size) + new_x] != 'ground':
+            return
+
+        self.player_x = new_x
+        self.player_y = new_y
 
     def loadMap(self, name):
         im = Image.open('assets/maps/' + name + '.png')
