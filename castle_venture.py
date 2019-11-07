@@ -5,7 +5,7 @@ SCREEN_WIDTH = 80
 SCREEN_HEIGHT = 50
 LIMIT_FPS = 20
 
-tdl.set_font('assets/terminal8x12_gs_tc.png', greyscale=True, altLayout=True)
+tdl.set_font('assets/terminal8x12_gs_ro.png', greyscale=True)
 
 console = tdl.init(
     SCREEN_WIDTH,
@@ -34,3 +34,5 @@ while not tdl.event.is_window_closed():
     game.renderEntities(console)
 
     tdl.flush()
+
+    game.update()

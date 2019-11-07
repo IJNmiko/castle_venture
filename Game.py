@@ -1,6 +1,8 @@
 import json
 from PIL import Image
 
+import Entity
+
 
 class Game:
     def __init__(self):
@@ -37,6 +39,16 @@ class Game:
         self.player_x = new_x
         self.player_y = new_y
 
+    def update(self):
+        if 'entities' not in self.maps_data[self.current_map]:
+            return
+
+        for e in self.maps_data[self.current_map]['entities']:
+            entity = self.maps_data[self.current_map]['entities'][e]
+
+            if entity['instance']:
+                entity['instance'].update()
+
     def loadMap(self, name):
         map_data = json.load(
             open('assets/maps/' + name + '.json', 'r')
@@ -63,6 +75,18 @@ class Game:
                     # Handle event tiles
                     event = map_data['events'][str(pixel[1])]
                     self.maps_data[name]['events'][(x, y)] = event
+
+                    tiles.append('ground')
+                elif pixel[1] == 255:
+                    # Handle entities
+                    entity = map_data['entities'][str(pixel[2])]
+
+                    entity['instance'] = Entity.Entity(
+                        x,
+                        y,
+                        chr(entity['char']),
+                        entity['ai']
+                    )
 
                     tiles.append('ground')
                 else:
@@ -98,10 +122,19 @@ class Game:
         console.draw_char(
             self.player_x,
             self.player_y,
-            '@',
+            chr(5),
             bg=None,
             fg=(255, 255, 255)
         )
+
+        if 'entities' not in self.maps_data[self.current_map]:
+            return
+
+        for e in self.maps_data[self.current_map]['entities']:
+            entity = self.maps_data[self.current_map]['entities'][e]
+
+            if entity['instance']:
+                entity['instance'].render(console)
 
     def renderText(self, console, text, x, y, w):
         console.clear()

@@ -1,0 +1,12 @@
+{
+    "description": "You are in an empty room. Chilly wind blows past you from somewhere. To the north is a Doorway.",
+    "events": {
+        "0": "map hall_of_four 1 20"
+    },
+    "entities": {
+        "0": {
+            "char": 1,
+            "ai": "disappear"
+        }
+    }
+}
