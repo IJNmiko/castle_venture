@@ -1,0 +1,6 @@
+{
+    "description": "You are in the Hall of Four. There are exits in all four directions.",
+    "events": {
+        "0": "map hall1 20 1"
+    }
+}

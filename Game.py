@@ -5,7 +5,7 @@ from PIL import Image
 class Game:
     def __init__(self):
         self.maps = {}
-        self.maps_events = {}
+        self.maps_data = {}
         self.map_size = 40
 
         self.current_map = 'start'
@@ -25,8 +25,8 @@ class Game:
 
         # Check for event activation
         pos = (new_x, new_y)
-        if pos in self.maps_events[self.current_map]:
-            event = self.maps_events[self.current_map][pos]
+        if pos in self.maps_data[self.current_map]['events']:
+            event = self.maps_data[self.current_map]['events'][pos]
             self.handleEvent(event)
             return
 
@@ -42,7 +42,7 @@ class Game:
             open('assets/maps/' + name + '.json', 'r')
         )
 
-        self.maps_events[name] = {}
+        self.maps_data[name] = map_data
 
         im = Image.open('assets/maps/' + name + '.png')
         im = im.convert('RGB')
@@ -62,21 +62,26 @@ class Game:
                 elif pixel[0] == 255:
                     # Handle event tiles
                     event = map_data['events'][str(pixel[1])]
-                    self.maps_events[name][(x, y)] = event
+                    self.maps_data[name]['events'][(x, y)] = event
 
                     tiles.append('ground')
                 else:
                     tiles.append('?')
 
         self.maps[name] = tiles
-        self.current_map_desc = map_data['description']
 
     def renderCurrentMap(self, console):
-        # Print the map's description
-        self.renderText(console, self.current_map_desc, 0, 41, 40)
-
         if self.current_map not in self.maps:
             self.loadMap(self.current_map)
+
+        # Print the map's description
+        self.renderText(
+            console,
+            self.maps_data[self.current_map]['description'],
+            0,
+            41,
+            40
+        )
 
         x = 0
         y = 0
